@@ -1,22 +1,38 @@
 import './App.css';
-import React,{useState,useEffect} from 'react';
+import React, {useState} from 'react';
 
-function App() {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if(count<0) setCount(0);
-  });
+function Modal(props){
   return(
-    <div className = 'counter'>
-      <h1>Счётчик</h1>
-      <h2>{count}</h2>
-      <div className = 'control-count'>
-        <button className='button less' onClick={() => setCount(count - 1)}>уменьшить</button>      
-        <button className = 'button more' onClick = {() => setCount(count + 1)}>увеличить</button>
+    <div className = 'modal-background'>
+      <div className = 'modal'>
+        <div className = 'cross' onClick = {props.onClick}>X</div>
+        <img src= 'https://www.icegif.com/wp-content/uploads/icegif-2013.gif' alt = 'chika fujivara' className = 'modal-img'></img>
       </div>
-
     </div>
   )
+}
+
+
+function ModalButton (props){
+    return( <button 
+      onClick = {props.onClick}
+      className='modal-button button'>модальное окно<img 
+      className = 'button-widget ' 
+          src= 'https://w1.pngwing.com/pngs/804/103/png-transparent-star-symbol-logo-award-yellow-symmetry.png'
+      ></img>
+      </button>)
+}
+
+function App() {
+  const [modal, setModal] = useState(false);
+  const window = (modal) ? <Modal onClick = {() => setModal(false)}/>: console.log(1);
+  return (
+    <>
+      <ModalButton onClick={() => setModal(true)}></ModalButton>
+      {window}
+    </>
+  )
+  
 }
 
 export default App;
