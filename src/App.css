@@ -1,6 +1,23 @@
 body{
     height: 2000px;
+    background-color:rgb(115, 85, 212);
+    box-sizing: border-box;
 }
+
+.Quiz-section{
+    width:540px;
+    height:390px;
+    margin: 100px auto;
+    border-radius:30px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: white;
+}
+
+.Quiz-container{
+    padding:20px;
+    height:300px;
+}
+
 .button{
     background-color: white;
     outline: none;
@@ -21,60 +38,72 @@ body{
     transition-duration: 0.05s;
 }
 
-.button-widget{
-    height:100%;
-    width:25%;
-}
-.modal-button{
-    width:250px;
-    height:50px;
-    display: flex;
-    justify-content: center;
-    align-items:center;
-    margin:  100px auto;
-    background: #a4f843;
-    border-radius:50px;
+.question{
+    font-size:32px;
+    font-weight: bold;
+    margin:20px 0;
 }
 
-.modal-button:hover{
-    background: #7ee20c;
+.question::first-letter, .Quiz-answer::first-letter{
+    text-transform: uppercase;
 }
 
-.modal-button:active {
-    background: #79d114;
+.Quiz-answer{
+    width: 70%;
+    min-width: 500px;
+    height: 60px;
+    color:#838383;
+    border: 2px solid #9f9f9f;
+    border-radius: 10px;
+    margin: 2px;
+    text-align: left;
+    transition-duration: 150ms;
+}
+#section-decoration2{
+    height: 70px;
+    width: 92%;
+    background-color: rgba(255, 255, 255, 0.386);
+}
+.section-decoration {
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.792);
+    width: 95%;
+    height: 60px;
+    border-radius: 30px;
 }
 
-.cross{
-    cursor: pointer;
-    text-align: right;
-    width:100%;
-    padding: 10px 60px 0 0;
-    color:#b1b1b1;
+
+.Quiz-answer:hover{
+    border-color:#000;
+    color:#000;
+    background:#f9f9f9;
 }
 
-.modal-background{
-    background-color: #75757571;
-    position: fixed;
-    top:0;
+.progressBar{
     width: 100%;
-    height: 100%;
+    border-radius:5px;
+    height:10px;
+    background:#ffe477;
 }
 
-.modal{
-    margin: 100px auto;
-    width: 700px;
-    height: 500px;
-    background: #ffffff;
-    border-radius: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
+.progress{
+    width:0%;
+    max-width:100%;
+    transition-duration: 300ms;
+    background:linear-gradient(to left, #29bedc, #b82fea);
+    border-radius: 5px;
+    height:100%;
 }
 
-.modal-img{
-    width:90%;
-    height: 90%;
-    border-radius: 100px;
+.progress-end{
+    width: 100%;
+}
+
+h2{
+    color:#353535;
+}
+
+.result{
+    font-size: 40px;
+    color: #353535;
 }
