@@ -1,116 +1,119 @@
 import './App.css';
 import React from 'react';
-import Users from "./users.json"
-let users = Users.users;
-users.map((elem) => elem.offer = true);
+import curs from './currencies.json';
+const currencies = curs.currencies.map((elem) => [elem.name, elem.rate]);
 
-function User(props){
+
+
+function ConvertBlock(props) {
   return (
-    <div className = "user">
-      <img  className = "user-ava" src= "https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_square.jpg"></img>
-      <div className = 'info'>
-        <p className = 'userName'>{props.name}</p>
-        <p className = 'userMail'>{props.email}</p>
-      </div>
-      {(props.inList) ? 
-        <button className = 'offer' onClick = {() => {props.changeStatus(props.num)}}>
-        {(props.offer) ? '+' : '-'}
-        </button> : <></>
-      }
-      
+    <div className = 'convert-block'>
+      <input 
+      type = 'text' 
+      value = {props.value} 
+      onChange = {(e) => props.handleChange(e.target.value)}
+      ></input>
     </div>
   )
 }
 
-function CreateList(props){
-  let list = [];
-  let num = 0;
-  props.users.forEach((user) => {
-    if (user.name.toLowerCase().includes(props.search.toLowerCase())) {
-      list.push(<User 
-      name = {user.name} 
-      email = {user.email} 
-      offer = {user.offer}
-      num = {num}
-      inList = {props.inList}
-      changeStatus = {(user) => { props.changeStatus(user)}}
-      />)
-    }
-    num += 1;
-  })
-  return list;
+function Currency(props) {
+  const isChoosen = props.isChoosen ?? false;
+  return <button 
+  className={(isChoosen) ? 'choose-currency choosen' : 'choose-currency'}
+  onClick = {() => props.change(props.num)}
+  >{props.name}</button> 
+}
+
+function ChangeCurrency(props){
+  let curs = currencies.map((elem) => <
+    Currency name = {elem[0]} 
+    isChoosen = {props.choosen == currencies.indexOf(elem)} 
+    num = {currencies.indexOf(elem)}
+    change = {(num) => props.change(num)}
+    />);
+  if (!props.more) {curs = <>{curs.slice(0, 5)} <button className='choose-currency other-currencies' onClick={props.makeMore}>. . .</button></>
+  } else {curs = <>{curs} <button className='choose-currency other-currencies' onClick={props.makeMore}>~</button></>}
+  
+  return(
+    <div className = 'change-currency'>
+      {curs}
+    </div>
+  )
 }
 
 class App extends React.Component{
-  constructor(props) {
+  constructor(props){
     super(props);
     this.state = {
-      users : users,
-      search : '',
-      isSend : false
+      from: 1,
+      to: 0,
+      fromValue: 0,
+      toValue: 0,
+      isMore: false
     }
   }
 
-
-  send(){
-      this.setState((state) => ({isSend : !state.isSend}))
+  convert(value, isFrom, from = this.state.from, to = this.state.to){
+    if(isFrom){
+      this.setState({
+        toValue: Math.round(value / currencies[to][1] * currencies[from][1] * 10000)/10000
+      })
+    } else {
+      this.setState({
+        fromValue: Math.round(value * currencies[to][1] / currencies[from][1] * 10000) / 10000
+      });
+    }
   }
-  changeStatus (user){
-    const users = this.state.users;
-    users[user].offer = !users[user].offer;
-    this.setState ({users : users});
+
+  handleChange(value, isFrom){
+    if (!Number(value) && Number(value) != 0) return;
+    if (isFrom) {this.setState({
+      fromValue : value, 
+    }); } else this.setState({
+      toValue: value,
+    });
+    this.convert(value, isFrom)
+
+
+  }
+
+  change(num, isFrom){
+  
+    const [from,to] = [this.state.from, this.state.to];
+    new Promise ((resolve) => {
+      if (isFrom) {
+        this.setState ({from : num})
+      } else {
+        this.setState ({to:num})
+      }
+      if ((to == num) && (isFrom) || (from == num) && (!isFrom)) this.setState({from:to, to:from}); 
+      resolve ();  
+    }).then (
+      result => this.convert(this.state.fromValue, true)
+    )
   }
 
   render(){
-    if(this.state.isSend) {
-
-      let sendUsers = [];
-      this.state.users.forEach(user => {
-        console.log(user.offer);
-        if(user.offer == false) sendUsers.push(user);
-      });
-      console.log(sendUsers);
-
-      return (
-        <div className = 'users-list isSend'>
-          <div>Приглашения отправлены:</div>
-          <div className = 'list'>
-            <CreateList
-            inList = {false}
-            users={sendUsers}
-            search={''}
-            />
-          </div>
-          <button className='send' onClick={() => this.send()}>Назад</button>
-        </div>
-      )
-    }
-
+    const state = this.state;
     return (
-      <div className = 'users-list'>
-        <div className = 'search-container' >
-          <img src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyi_CVTmoL1ITHFxQkfLwvj93hcsgA1Olkhg&usqp=CAU" className='search-img' />
-          <input 
-          type='text' 
-          className="user-search" 
-          placeholder="Найти пользователя"
-          onChange = {(e) => this.setState({search : e.target.value})}
-          value={this.state.search}
-          ></input>
-
+      <div className={(this.state.isMore) ? 'convert-container convert-container-big' : 'convert-container'}>
+        <div className = 'currency-control'>
+          <ChangeCurrency choosen = {this.state.from} change = {(num) => this.change(num, true)} more = {this.state.isMore} makeMore = {() => this.setState({isMore:!this.state.isMore})}/>
+          <ChangeCurrency choosen={this.state.to} change={(num) => this.change(num, false)} more={this.state.isMore} makeMore={() => this.setState({ isMore: !this.state.isMore })} />
         </div>
-        <div className='list'>
-        <CreateList 
-        users = {this.state.users} 
-        search = {this.state.search}
-        inList = {true}
-        changeStatus = {(user) => {this.changeStatus(user)}}
+        <div className = 'input-control'>
+          <ConvertBlock 
+          value = {state.fromValue} 
+          handleChange={(value, isFrom = true) => this.handleChange(value, isFrom)}
           />
-            
+          <ConvertBlock
+          value={state.toValue}
+          handleChange={(value, isFrom = false) => this.handleChange(value, isFrom)}
+          />
         </div>
-        <button className = 'send' onClick = {() => this.send()}>Отправить приглашение</button>
       </div>
-      )
+    )
   }
 }
 
