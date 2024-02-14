@@ -1,8 +1,8 @@
 body{
-    min-height: 600px;
+    min-height: 100vh;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(to bottom, #e8e9f0, #b0b4bd);
+    background-image: url("https://catherineasquithgallery.com/uploads/posts/2021-12/1639655556_1-catherineasquithgallery-com-p-skachat-fon-rozovii-s-serdechkami-1.jpg");
 }
 
 .button{
@@ -12,113 +12,202 @@ body{
     width:120px;
     height: 50px;
     padding: 10px;
-    color: white;
+    color: black;
     border-radius: 10px;   
     cursor: pointer; 
 }
 
 .button:hover, button:active{
-    outline: none;
+    outline: none;    
+}
+
+
+.todo-container{
+    margin: 50px auto;
+    width: 700px;
+}
+
+.todo-container button{
+    margin-left:10px;
+}
+
+.todos{
+    margin-top:10px;
+}
+
+.todo{
+    width: 100%;
+    list-style-type: none;    
+}
+.todo :last-child{
+    margin-left:10px;
+    cursor:pointer;
+    color: red;
+}
+
+.todo input{
+    margin-right:10px;
+    margin-left: 10%;
+
+}
+
+.todo input:checked + span {
+    text-decoration: line-through;
+}
+.input-container{
+    margin:auto;
+    width:400px
+}
+
+.loading{
+    font-size: 100px;
+    color:#000;
     
 }
 
-.gallery-container{
-    margin: 0 auto 100px auto;
-    width: 80%;
+.root{
+    display: flex;
+    width:100vw;
+    height:100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.filter{
-    color: black;
-    width: auto;
-    height: 40px;
-    margin: 0 5px;
-    transition-duration: 200ms;
-    background:none;
+.letter{
+    width: 60vw;
+    height: 60vw;
+    display: block;
+    margin:auto;
+    position: fixed;
+    object-fit: cover;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-fill-mode:forwards;
+    cursor: pointer;
+    user-select: none;
+    top:130vh;
+
 }
 
-.filter:hover{
-    background-color:#dddddd;
-    box-shadow: -1px 1px 2px 0.5px #b8b8b8;
+.letter-inner{
+    z-index: -1;
+    rotate: -30deg;
+    width: 50vw;
+    height: 50vw;
+    display: block;
+    margin: auto;
+    position: fixed;
+    object-fit: cover;
+    animation-duration: 1.2s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+    cursor: pointer;
+    user-select: none;
+    top: 130vh;
 }
 
-.filter-active{
-    background-color:black;
+.gif{
+    width: 70vw;
+    height: 70vw;
+    object-fit: cover;
+    border-radius:2vw;
+
+}
+
+@keyframes letter-shower{
+    0% {
+        top: 130vh;
+    }
+    100%{
+        top: 20vh;
+    }
+}
+
+@keyframes letter-inner-shower {
+    0% {
+        top: 130vh;
+    }
+    80%{
+        top:20vh;
+    }
+    100% {
+        top: 13vh;
+    }
+}
+
+@keyframes letter-hide {
+    0% {
+        top: 13vh;
+    }
+
+    100% {
+        top: 130vh;
+    }
+}
+@keyframes letter-bigger {
+    0% {
+        top: 13vh;
+    }
+
+    100% {
+        top: 20vh;
+        width:70vw;
+        rotate:0deg;
+    }
+}
+
+.modal{
+    color: white;
+    width:70vw;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    display: none;
+    animation-duration: 1.2s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+}
+
+.modal .img-container{
+    width: 50vw;
+    height: 50vw;
+    overflow: hidden; 
+    box-shadow: 0 0 10px 10px rgb(255, 29, 187);
+    border-radius: 20px;
+}
+.modal img{
+    transform: scale(2);
+    position: relative;
+    top:-30%;
+    width:50vw;
+    height:50vw;
+}
+
+h1{
+    text-align: center;
     color:white;
 }
-.filter-active:hover {
-    background-color: black;
-    color: white;
-}
 
-.filter-control{
-    margin: 10px 0;
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+@keyframes modal-shower{
+    0%{
+        display: flex;
+        opacity: 0;
+    }
+    100%{
+        opacity: 100%;
+    }
 }
-
-input{
-    background: none;
-    border-width:0;
-    outline-width: 0;
-    box-shadow: -2px 2px 3px 1px #b1b1b1;
-    border-radius: 10px;
-    padding: 5px;
-}
-
-.gallery-search{
-    height: 30px;
-    width: 300px;
-    margin-left: 24px;
-}
-
-.photo-container{
-    margin: 10px;
-    width: 300px;
-    height: 370px;
-    background: white;
-    border-radius: 30px;
-    padding: 15px;
-    display: inline-block;
-    font-weight: 100;
-}
-
-.photo{
-    width:100%;
-    height: 45%;
-    object-fit: cover;
-    margin: auto;
-    border-radius:20px;
-}
-
-.small-photo{
-    width:45%;
-    height: 90%;
-    object-fit: cover;
-    
-}
-
-.bottom-container{
-    width:100%;
-    height: 40%;
-}
-
-.small-photo-container{
-    width:100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.page-button{
-    background:white;
-    margin: 20px 0 10px 10px;
-}
-
-.page-button:hover{
-    background:#dadada;
-    box-shadow: -1px 1px 2px 0.5px #6b6b6b;
+@keyframes letter-inner-hide {
+    0%{
+        top:20vw;
+        rotate: 0deg;
+    }
+    100% {
+        opacity: 0;
+        width:500vw;
+        height: 500vw;
+        top:30vw;
+        rotate: 0deg;
+    }
 }
