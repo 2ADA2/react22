@@ -1,96 +1,62 @@
+import React, {useState, useEffect} from 'react'
 import './App.css';
-import React from 'react';
-import data from "./data.json";
-const categories = ['Все', 'Море','Горы','Архитектура', 'Города']
+import loveImg from './static/Lovepik_com-401112306-pink-letter.png'
 
-function CreateFilter(props){
-  const buttons = categories.map(elem => <button className={(props.active != categories.indexOf(elem)) ? "button filter" : "button filter filter-active"}>{elem}</button>)
-  return buttons;
-}
-
-function PagesControl(props){
-  let pages = [];
-  for (let i = 0; i <= props.num-1; i++){
-    pages.push(<button className = 'button filter page-button' onClick = {() => props.changePage(i)}>{i+1}</button>)
-  }
-  return pages;
-}
-
-function CreateGallery(props) {
-  let gallery = data.map (elem => {
-    if (elem.name.toLowerCase().includes(props.search.toLowerCase()) && (props.category == 0 || props.category == elem.category )){
-      return <CreatePhotoes id = {data.indexOf(elem)
-    }
-  />}});
-  gallery = gallery.filter((elem) => elem != undefined)
-  let page;
-  if (props.page+1 * 4 > gallery.length) {
-    page = Math.ceil(gallery.length/4-1);
-  } else {
-    page = props.page*4;
-  }
-  return gallery.slice(page, page + 4);
-}
-
-function CreatePhotoes (props){
-  const id = props.id;
+function Loading(){
   return (
-    <div className = "photo-container">
-      <img className = 'photo' src = {data[id].photoes[0]}></img>
-      <div className = 'bottom-container'>
-        <div className = 'small-photo-container'>
-          <img className='photo small-photo' src={data[id].photoes[1]}></img>
-          <img className='photo small-photo' src={data[id].photoes[2]}></img>
-        </div>
-        <h3 className = 'photo-name'>{data[id].name}</h3>
-      </div>
-    </div>
-  )
+  <>
+    <h1>{"Валентинка от Артёмки Кристиночке)))))"}</h1>
+    <img className="gif" src="https://i.pinimg.com/originals/c7/bd/9d/c7bd9d1c6a0031d35c02356325ab081c.gif"></img>
+    
+  </>
+)
 }
 
-class App extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      filter : 0,
-      search: '',
-      page : 0,
-      pages : Math.ceil(data.length/4),
-      count : data.length
-    }
-  }
+function App() {
+  const [loaded, setLoaded] = useState(false);
+  const [time, setTime] = useState (false);
+  const [animation, setAnimation] = useState("letter-shower");
+  const [letterAnimation, setLetterAnimation] = useState("letter-inner-shower");
+  const [modalAnimation, setModalAnimation] = useState(false);
 
-  filterControl(target){
-    if (target.parentNode.className == "control") {
-      new Promise ((resolve) => {
-        this.setState ({filter : categories.indexOf(target.innerHTML)});
-        resolve();
-      })
-    }
-  }
+  useEffect(() => {
+    const time = setTimeout(() => {
+      setTime(true)
+    }, 4000);
+  }, []);
 
-  render(){
-    const state = this.state
-    return ( 
-    <div className = 'gallery-container'>
-      <h2>Моя коллекция фотографий</h2>
-      <div className="filter-control">
-        <div className='control' onClick={e => this.filterControl(e.target)}>
-          <CreateFilter active = {state.filter}/>
+  return (
+    <div className = 'root'
+      onClick={() => {
+        if (letterAnimation == 'letter-bigger') {
+          console.log(1)
+          setModalAnimation("modal-shower");
+          setLetterAnimation("letter-inner-hide")
+        }
+      }}>
+      {(!(loaded && time)) ? <Loading /> : <></>}
+      
+      <img 
+      className="letter" 
+        src='https://free-png.ru/wp-content/uploads/2021/12/free-png.ru-675.png' onLoad={() => setLoaded(!loaded)}
+        style={(loaded && time) ? {"animation-name" : animation} : {}}
+        onClick = {() => {
+          setAnimation("letter-hide");
+          setLetterAnimation("letter-bigger");
+          }}
+      ></img>
+      <img 
+        src={loveImg}
+      className = "letter-inner"
+      style={(loaded && time) ? { "animation-name": letterAnimation } : {}}
+      ></img>
+      <div className="modal" style={(modalAnimation) ? { "display":"flex", "animation-name": modalAnimation } : {}}>
+        <div className = "img-container">
+        <img src= "https://i.ytimg.com/vi/dWS3jjKgnPE/hqdefault.jpg?sqp=-oaymwEmCOADEOgC8quKqQMa8AEB-AGaBIAC6AKKAgwIABABGGUgXyhWMA8=&rs=AOn4CLAxy_yEh5CFeu6ux7pIZ9YyxbSESg"></img>
         </div>
-        <input type = 'text' className = 'gallery-search' placeholder='поиск' value = {state.search} onChange = {(e) => this.setState({search : e.target.value})}></input>
+        <p>Блин ну ты такая киси миси хаги ваги мимимими красивая смушняешб миня) го встр?)))))</p>
       </div>
-      <div className = 'photoes-container'>
-          <CreateGallery 
-            page={state.page} 
-            search={state.search} 
-            setPages = {(pages) => this.setState({pages:pages})}
-            category = {this.state.filter}
-            />
-      </div>
-        <PagesControl num = {state.pages} changePage = {(i) => this.setState({page:i})}/>
     </div>
-  )}
+    )
 }
-
 export default App;
